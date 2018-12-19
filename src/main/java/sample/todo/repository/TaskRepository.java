@@ -17,48 +17,47 @@ import java.util.Optional;
 
 @Repository
 public class TaskRepository {
-    @Autowired
-    private NamedParameterJdbcTemplate jdbcTemplate;
+  @Autowired private NamedParameterJdbcTemplate jdbcTemplate;
 
-    public List<Task> findAll() {
-        return jdbcTemplate.query("SELECT * FROM tasks order by id",
-                new BeanPropertyRowMapper<Task>(Task.class));
+  public List<Task> findAll() {
+    return jdbcTemplate.query(
+        "SELECT * FROM tasks order by id", new BeanPropertyRowMapper<Task>(Task.class));
+  }
+
+  public Optional<Task> findOne(Integer id) {
+    SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+
+    try {
+      return Optional.ofNullable(
+          jdbcTemplate.queryForObject(
+              "SELECT * FROM tasks WHERE id = :id",
+              param,
+              new BeanPropertyRowMapper<>(Task.class)));
+    } catch (EmptyResultDataAccessException e) {
+      return Optional.ofNullable(null);
     }
+  }
 
-    public Optional<Task> findOne(Integer id) {
-        SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+  public Task save(Task task) {
+    SqlParameterSource param = new BeanPropertySqlParameterSource(task);
 
-        try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(
-                    "SELECT * FROM tasks WHERE id = :id",
-                    param,
-                    new BeanPropertyRowMapper<>(Task.class)
-            ));
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.ofNullable(null);
-        }
+    if (task.getId() == null) {
+      SimpleJdbcInsert insert =
+          new SimpleJdbcInsert((JdbcTemplate) jdbcTemplate.getJdbcOperations())
+              .withTableName("tasks")
+              .usingGeneratedKeyColumns("id");
+      Number key = insert.executeAndReturnKey(param);
+      task.setId(key.intValue());
+    } else {
+      jdbcTemplate.update(
+          "UPDATE tasks SET subject = :subject, deadLine = :deadLine, hasDone = :hasDone WHERE id = :id",
+          param);
     }
+    return task;
+  }
 
-    public Task save(Task task) {
-        SqlParameterSource param = new BeanPropertySqlParameterSource(task);
-
-        if (task.getId() == null) {
-            SimpleJdbcInsert insert =
-                    new SimpleJdbcInsert((JdbcTemplate) jdbcTemplate.getJdbcOperations())
-                    .withTableName("tasks")
-                    .usingGeneratedKeyColumns("id");
-            Number key = insert.executeAndReturnKey(param);
-            task.setId(key.intValue());
-        } else {
-            jdbcTemplate.update(
-                    "UPDATE tasks SET subject = :subject, deadLine = :deadLine, hasDone = :hasDone WHERE id = :id", param
-            );
-        }
-        return task;
-    }
-
-    public void deleteOne(Integer id) {
-        SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
-        jdbcTemplate.update("DELETE FROM tasks WHERE id = :id", param);
-    }
+  public void deleteOne(Integer id) {
+    SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+    jdbcTemplate.update("DELETE FROM tasks WHERE id = :id", param);
+  }
 }
