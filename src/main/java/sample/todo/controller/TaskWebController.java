@@ -76,7 +76,7 @@ public class TaskWebController {
   private TaskForm createInitialForm() {
     String formSubject = "";
     LocalDate formDeadLine = LocalDate.now();
-    return new TaskForm(formSubject, formDeadLine, true, false);
+    return new TaskForm(formSubject, formDeadLine, false, true);
   }
 
   private void createTaskFromForm(TaskForm form) {
