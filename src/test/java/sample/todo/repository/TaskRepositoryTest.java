@@ -16,6 +16,7 @@ import sample.todo.domain.Task;
 import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static com.ninja_squad.dbsetup.Operations.*;
 import static org.hamcrest.Matchers.is;
@@ -120,5 +121,40 @@ public class TaskRepositoryTest {
         List<Task> actual = taskRepository.findAll();
         assertThat(actual.size(), is(1));
         assertThat(actual.get(0).getSubject(), is(t.getSubject()));
+    }
+
+    @Test
+    public void saveUpdateTest() {
+        final Operation DELETE_ALL = deleteAllFrom("tasks");
+        final Operation INSERT =
+                insertInto("tasks")
+                        .row()
+                        .column("id", 2)
+                        .column("subject", "subject2")
+                        .column("deadLine", "2018-12-4")
+                        .column("hasDone", false)
+                        .end()
+                        .row()
+                        .column("id", 1)
+                        .column("subject", "subject1")
+                        .column("deadLine", "2018-12-3")
+                        .column("hasDone", false)
+                        .end().build();
+        Operation operation = sequenceOf(DELETE_ALL, INSERT);
+        DbSetup dbSetup = new DbSetup(new DataSourceDestination(dataSource), operation);
+        dbSetup.launch();
+        List<Task> db_data = taskRepository.findAll();
+        assertThat(db_data.size(), is(2));
+
+        Task t = db_data.get(1);
+        t.setSubject("UpdatedSubject"); t.setDeadLine(LocalDate.of(2020, 1, 10));
+        t.setHasDone(false);
+        taskRepository.save(t);
+
+        Optional<Task> actual = taskRepository.findOne(t.getId());
+        assertThat(actual.isPresent(), is(true));
+        assertThat(actual.get().getSubject(), is(t.getSubject()));
+        assertThat(actual.get().getDeadLine(), is(t.getDeadLine()));
+        assertThat(actual.get().getHasDone(), is(t.getHasDone()));
     }
 }
