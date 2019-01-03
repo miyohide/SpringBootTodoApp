@@ -18,7 +18,12 @@ public class TaskWebController {
   private static final String VIEW_NAME_OF_TASKS = "tasks";
   private static final String REDIRECT_TO = "redirect:/" + VIEW_NAME_OF_TASKS;
 
-  @Autowired TaskService taskService;
+  private TaskService taskService;
+
+  @Autowired
+  TaskWebController(TaskService taskService) {
+    this.taskService = taskService;
+  }
 
   @GetMapping(value = "/tasks")
   public ModelAndView readAllTasks() {
