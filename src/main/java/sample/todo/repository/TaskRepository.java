@@ -17,7 +17,12 @@ import java.util.Optional;
 
 @Repository
 public class TaskRepository {
-  @Autowired private NamedParameterJdbcTemplate jdbcTemplate;
+  private NamedParameterJdbcTemplate jdbcTemplate;
+
+  @Autowired
+  TaskRepository(NamedParameterJdbcTemplate jdbcTemplate) {
+    this.jdbcTemplate = jdbcTemplate;
+  }
 
   public List<Task> findAll() {
     return jdbcTemplate.query(
