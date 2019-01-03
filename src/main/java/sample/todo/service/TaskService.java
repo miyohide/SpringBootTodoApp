@@ -12,7 +12,12 @@ import java.util.Optional;
 
 @Service
 public class TaskService {
-  @Autowired TaskRepository taskRepository;
+  private TaskRepository taskRepository;
+
+  @Autowired
+  TaskService(TaskRepository taskRepository) {
+    this.taskRepository = taskRepository;
+  }
 
   @Transactional(readOnly = false)
   public List<Task> findAllTasks() {
