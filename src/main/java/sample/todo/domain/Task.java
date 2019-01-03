@@ -6,13 +6,13 @@ import java.util.Objects;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class Task {
-  Integer id;
-  String subject;
+  private Integer id;
+  private String subject;
 
   @DateTimeFormat(pattern = "yyyy-MM-dd")
-  LocalDate deadLine;
+  private LocalDate deadLine;
 
-  Boolean hasDone;
+  private Boolean hasDone;
 
   public Task() {}
 
