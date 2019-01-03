@@ -95,4 +95,13 @@ public class TaskRepositoryTest {
         assertThat(actual.getDeadLine(), is(t.getDeadLine()));
         assertThat(actual.getHasDone(), is(t.getHasDone()));
     }
+
+    @Test
+    public void findOneNotMatchData() {
+        final Operation DELETE_ALL = deleteAllFrom("tasks");
+        Operation operation = sequenceOf(DELETE_ALL);
+        DbSetup dbSetup = new DbSetup(new DataSourceDestination(dataSource), operation);
+        dbSetup.launch();
+        assertThat(taskRepository.findOne(100).isPresent(), is(false));
+    }
 }
