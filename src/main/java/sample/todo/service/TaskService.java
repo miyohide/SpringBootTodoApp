@@ -19,14 +19,14 @@ public class TaskService {
     this.taskRepository = taskRepository;
   }
 
-  @Transactional(readOnly = false)
+  @Transactional
   public List<Task> findAllTasks() {
     List<Task> allTasks = taskRepository.findAll();
     allTasks.sort(Comparator.comparing(Task::getDeadLine));
     return allTasks;
   }
 
-  @Transactional(readOnly = false)
+  @Transactional
   public Task createTask(Task task) {
     return taskRepository.save(task);
   }
@@ -36,12 +36,12 @@ public class TaskService {
     return taskRepository.findOne(id);
   }
 
-  @Transactional(readOnly = false)
+  @Transactional
   public Task updateTask(Task task) {
     return taskRepository.save(task);
   }
 
-  @Transactional(readOnly = false)
+  @Transactional
   public void deleteOneTask(Integer id) {
     taskRepository.deleteOne(id);
   }
