@@ -58,4 +58,41 @@ public class TaskRepositoryTest {
         assertThat(actual.get(0).getId(), is(1));
         assertThat(actual.get(1).getId(), is(2));
     }
+
+    @Test
+    public void findOneMatchData() {
+        final Operation DELETE_ALL = deleteAllFrom("tasks");
+        final Operation INSERT =
+                insertInto("tasks")
+                        .row()
+                        .column("id", 2)
+                        .column("subject", "subject2")
+                        .column("deadLine", "2018-12-4")
+                        .column("hasDone", false)
+                        .end()
+                        .row()
+                        .column("id", 1)
+                        .column("subject", "subject1")
+                        .column("deadLine", "2018-12-3")
+                        .column("hasDone", false)
+                        .end()
+                        .row()
+                        .column("id", 3)
+                        .column("subject", "subject3")
+                        .column("deadLine", "2018-11-3")
+                        .column("hasDone", false)
+                        .end().build();
+        Operation operation = sequenceOf(DELETE_ALL, INSERT);
+        DbSetup dbSetup = new DbSetup(new DataSourceDestination(dataSource), operation);
+        dbSetup.launch();
+        List<Task> db_data = taskRepository.findAll();
+        assertThat(db_data.size(), is(3));
+        Task t = db_data.get(1);
+        Task actual = taskRepository.findOne(t.getId()).get();
+
+        assertThat(actual.getId(), is(t.getId()));
+        assertThat(actual.getSubject(), is(t.getSubject()));
+        assertThat(actual.getDeadLine(), is(t.getDeadLine()));
+        assertThat(actual.getHasDone(), is(t.getHasDone()));
+    }
 }
