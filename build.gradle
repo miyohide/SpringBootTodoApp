@@ -33,6 +33,5 @@ dependencies {
     runtimeOnly('com.h2database:h2')
     compileOnly('org.projectlombok:lombok')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
-    testImplementation('org.dbunit:dbunit:2.5.0')
-    testImplementation('com.github.springtestdbunit:spring-test-dbunit:1.2.0')
+    testCompile 'com.ninja-squad:DbSetup:2.1.0'
 }
