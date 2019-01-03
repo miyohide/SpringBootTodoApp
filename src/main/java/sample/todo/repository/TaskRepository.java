@@ -26,7 +26,7 @@ public class TaskRepository {
 
   public List<Task> findAll() {
     return jdbcTemplate.query(
-        "SELECT * FROM tasks order by id", new BeanPropertyRowMapper<Task>(Task.class));
+        "SELECT * FROM tasks order by id", new BeanPropertyRowMapper<>(Task.class));
   }
 
   public Optional<Task> findOne(Integer id) {
