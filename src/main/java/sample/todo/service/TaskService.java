@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Service
 public class TaskService {
-  private TaskRepository taskRepository;
+  private final TaskRepository taskRepository;
 
   @Autowired
   TaskService(TaskRepository taskRepository) {

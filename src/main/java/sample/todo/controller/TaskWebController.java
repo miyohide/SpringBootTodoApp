@@ -18,7 +18,7 @@ public class TaskWebController {
   private static final String VIEW_NAME_OF_TASKS = "tasks";
   private static final String REDIRECT_TO = "redirect:/" + VIEW_NAME_OF_TASKS;
 
-  private TaskService taskService;
+  private final TaskService taskService;
 
   @Autowired
   TaskWebController(TaskService taskService) {

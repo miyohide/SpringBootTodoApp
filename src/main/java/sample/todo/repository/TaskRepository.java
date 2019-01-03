@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Repository
 public class TaskRepository {
-  private NamedParameterJdbcTemplate jdbcTemplate;
+  private final NamedParameterJdbcTemplate jdbcTemplate;
 
   @Autowired
   TaskRepository(NamedParameterJdbcTemplate jdbcTemplate) {
