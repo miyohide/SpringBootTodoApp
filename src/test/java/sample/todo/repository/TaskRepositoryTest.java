@@ -14,6 +14,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import sample.todo.domain.Task;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.ninja_squad.dbsetup.Operations.*;
@@ -103,5 +104,21 @@ public class TaskRepositoryTest {
         DbSetup dbSetup = new DbSetup(new DataSourceDestination(dataSource), operation);
         dbSetup.launch();
         assertThat(taskRepository.findOne(100).isPresent(), is(false));
+    }
+
+    @Test
+    public void saveInsertTest() {
+        final Operation DELETE_ALL = deleteAllFrom("tasks");
+        Operation operation = sequenceOf(DELETE_ALL);
+        DbSetup dbSetup = new DbSetup(new DataSourceDestination(dataSource), operation);
+        dbSetup.launch();
+        assertThat(taskRepository.findAll().size(), is(0));
+
+        Task t = new Task(null, "s2", LocalDate.of(2018, 12, 1), false);
+        taskRepository.save(t);
+
+        List<Task> actual = taskRepository.findAll();
+        assertThat(actual.size(), is(1));
+        assertThat(actual.get(0).getSubject(), is(t.getSubject()));
     }
 }
