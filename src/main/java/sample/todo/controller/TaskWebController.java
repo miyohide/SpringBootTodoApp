@@ -44,7 +44,7 @@ public class TaskWebController {
   @GetMapping(value = "/tasks/{id}")
   public ModelAndView readOneTask(@PathVariable Integer id) {
     Optional<TaskForm> form = readTaskFromId(id);
-    if (!form.isPresent()) {
+    if (form.isEmpty()) {
       return new ModelAndView(REDIRECT_TO);
     }
     ModelAndView modelAndView = toTasksPage();
