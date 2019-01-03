@@ -14,6 +14,7 @@ public class Task {
 
   private Boolean hasDone;
 
+  // RepositoryにてBeanPropertyRowMapperを使うために空のコンストラクタが必要
   public Task() {}
 
   public Task(Integer id, String subject, LocalDate deadLine, Boolean hasDone) {
