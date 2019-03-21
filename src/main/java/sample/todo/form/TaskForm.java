@@ -45,11 +45,11 @@ public class TaskForm {
     this.hasDone = hasDone;
   }
 
-  public Boolean getNewTask() {
+  public Boolean getIsNewTask() {
     return isNewTask;
   }
 
-  public void setNewTask(Boolean newTask) {
+  public void setIsNewTask(Boolean newTask) {
     isNewTask = newTask;
   }
 }
