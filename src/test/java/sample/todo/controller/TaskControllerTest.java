@@ -43,7 +43,7 @@ public class TaskControllerTest {
         TaskForm formObject = (TaskForm) modelMap.get("form");
         assertThat(formObject.getDeadLine(), is(LocalDate.now()));
         assertThat(formObject.getHasDone(), is(false));
-        assertThat(formObject.getNewTask(), is(true));
+        assertThat(formObject.getIsNewTask(), is(true));
     }
 
     @Test
@@ -66,7 +66,7 @@ public class TaskControllerTest {
         assertThat(tf.getSubject(), is(t1.getSubject()));
         assertThat(tf.getDeadLine(), is(t1.getDeadLine()));
         assertThat(tf.getHasDone(), is(t1.getHasDone()));
-        assertThat(tf.getNewTask(), is(false));
+        assertThat(tf.getIsNewTask(), is(false));
     }
 
     @Test
